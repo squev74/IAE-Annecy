@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liens IAE Annecy — Année d'étude</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap');
+
+  :root{
+    --paper: #EFEAE0;
+    --paper-raised: #F7F4EC;
+    --ink: #1E2A28;
+    --ink-soft: #4B5654;
+    --lake: #2F6F77;
+    --lake-deep: #1E4D53;
+    --gold: #A6773F;
+    --line: #D9D2C3;
+    --muted: #8A8478;
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin:0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Work Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a{ color: inherit; }
+
+  .wrap{
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  header{
+    padding: 64px 0 40px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 8px;
+  }
+
+  .kicker{
+    font-size: 14px;
+    color: var(--lake);
+    margin: 0 0 10px;
+    letter-spacing: 0.02em;
+  }
+
+  h1{
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(32px, 6vw, 44px);
+    line-height: 1.1;
+    margin: 0 0 14px;
+    color: var(--lake-deep);
+  }
+
+  header p.sub{
+    font-size: 16px;
+    color: var(--ink-soft);
+    max-width: 48ch;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .lake-divider{
+    width: 100%;
+    height: 14px;
+    margin: 28px 0 0;
+    opacity: 0.55;
+  }
+
+  /* search */
+  .search-row{
+    margin: 28px 0 6px;
+  }
+  .search-row input{
+    width: 100%;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 15px;
+    padding: 12px 16px;
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    color: var(--ink);
+  }
+  .search-row input::placeholder{ color: var(--muted); }
+  .search-row input:focus{
+    outline: 2px solid var(--lake);
+    outline-offset: 1px;
+  }
+
+  .legend{
+    display:flex;
+    gap: 20px;
+    margin: 18px 0 44px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    flex-wrap: wrap;
+  }
+  .legend span{ display:flex; align-items:center; gap:7px; }
+  .dot{
+    width: 8px; height:8px; border-radius: 50%;
+    display:inline-block;
+    flex: none;
+  }
+  .dot.grande{ background: var(--gold); }
+  .dot.moyenne{ background: var(--lake); opacity:.75;}
+  .dot.faible{ background: var(--muted); opacity:.55; }
+
+  section.category{
+    margin-bottom: 44px;
+  }
+
+  .category-head{
+    display:flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .category-head h2{
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 22px;
+    margin: 0;
+    color: var(--lake-deep);
+  }
+
+  .category-head .count{
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .category-head::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background: var(--line);
+    align-self: center;
+  }
+
+  ul.links{
+    list-style: none;
+    margin:0;
+    padding:0;
+  }
+
+  li.link-row{
+    border-bottom: 1px solid var(--line);
+  }
+  li.link-row:first-child{ border-top: 1px solid var(--line); }
+
+  li.link-row a.row-link{
+    display:flex;
+    align-items:flex-start;
+    gap: 14px;
+    padding: 16px 4px;
+    text-decoration: none;
+    transition: background-color .15s ease;
+  }
+  li.link-row a.row-link:hover,
+  li.link-row a.row-link:focus-visible{
+    background: var(--paper-raised);
+  }
+  li.link-row a.row-link:focus-visible{
+    outline: 2px solid var(--lake);
+    outline-offset: -2px;
+  }
+
+  .row-dot{
+    margin-top: 8px;
+  }
+
+  .row-text{
+    flex: 1;
+    min-width: 0;
+  }
+
+  .row-name{
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 3px;
+    color: var(--ink);
+  }
+
+  .row-desc{
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.45;
+    margin: 0;
+  }
+
+  .row-host{
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-top: 5px;
+  }
+
+  /* importance visual weight */
+  li[data-importance="faible"] .row-name{ font-weight: 500; color: var(--ink-soft); }
+  li[data-importance="faible"] .row-desc{ color: var(--muted); }
+
+  li.hidden{ display:none; }
+
+  footer{
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 480px){
+    header{ padding: 44px 0 32px; }
+    .wrap{ padding: 0 18px 60px; }
+    .legend{ gap: 14px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="kicker">Année à l'IAE Savoie Mont Blanc — Annecy</p>
+    <h1>Tous les liens utiles,<br>au même endroit</h1>
+    <p class="sub">Une page pour retrouver rapidement l'essentiel : scolarité, logement, sport, transport et le reste. Classée par catégorie, du plus important au moins important.</p>
+    <svg class="lake-divider" viewBox="0 0 680 14" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 7 Q 20 0, 40 7 T 80 7 T 120 7 T 160 7 T 200 7 T 240 7 T 280 7 T 320 7 T 360 7 T 400 7 T 440 7 T 480 7 T 520 7 T 560 7 T 600 7 T 640 7 T 680 7"
+            fill="none" stroke="#2F6F77" stroke-width="1.5"/>
+    </svg>
+  </header>
+
+  <div class="search-row">
+    <input type="text" id="search" placeholder="Rechercher un lien (nom, catégorie, description)…" autocomplete="off">
+  </div>
+
+  <div class="legend">
+    <span><i class="dot grande"></i>Grande importance</span>
+    <span><i class="dot moyenne"></i>Moyenne importance</span>
+    <span><i class="dot faible"></i>Faible importance</span>
+  </div>
+
+  <main id="categories"></main>
+
+  <footer>
+    Page personnelle, non affiliée à l'USMB. Pensez à vérifier les identifiants de connexion (ENT) auprès de l'université.
+  </footer>
+
+</div>
+
+<script>
+  const data = [
+    {
+      category: "Scolarité",
+      items: [
+        { name: "IAE espace étudiant", url: "https://espace-etudiant.univ-smb.fr/", desc: "Emploi du temps, mails, accès Moodle, événements et vie étudiante.", importance: "grande" },
+        { name: "MOODLE", url: "https://moodle.univ-smb.fr/", desc: "Contenu et supports de cours.", importance: "grande" },
+        { name: "Site principal IAE Savoie Mont Blanc", url: "https://www.iae.univ-smb.fr/", desc: "Actualités, contacts, formations.", importance: "moyenne" },
+      ]
+    },
+    {
+      category: "Logement",
+      items: [
+        { name: "Pré Saint-Jean — newsletter", url: "https://residence-presaintjean-n-w5qkysv.gamma.site/", desc: "Newsletter de la résidence étudiante.", importance: "moyenne" },
+      ]
+    },
+    {
+      category: "Sport",
+      items: [
+        { name: "Espace Sport", url: "https://mon-espace-service-sports.univ-smb.fr/my/#courses", desc: "Accès aux activités sportives de l'université.", importance: "moyenne" },
+      ]
+    },
+    {
+      category: "Transport",
+      items: [
+        { name: "SIBRA", url: "https://www.sibra.fr/", desc: "Réseau de bus à Annecy.", importance: "moyenne" },
+      ]
+    },
+    {
+      category: "Restauration",
+      items: [
+        { name: "IZLY", url: "https://izly.fr/", desc: "Compte pour le restaurant universitaire (une appli mobile existe aussi).", importance: "faible" },
+      ]
+    },
+    {
+      category: "Divertissement",
+      items: [
+        { name: "Cinéma", url: "https://mon.allocine.fr/mes-cinemas/", desc: "Séances de cinéma à Annecy.", importance: "faible" },
+        { name: "Spectacles Bonlieu", url: "https://bonlieu-annecy.com/", desc: "Programmation de la scène nationale.", importance: "faible" },
+        { name: "Lac Annecy — spectacles", url: "https://www.lac-annecy.com/agenda/billetterie-et-spectacles-en-vente-en-ligne/", desc: "Billetterie et agenda des spectacles.", importance: "faible" },
+      ]
+    },
+  ];
+
+  const order = { grande: 0, moyenne: 1, faible: 2 };
+
+  function hostOf(url){
+    try{ return new URL(url).hostname.replace(/^www\./,''); }
+    catch(e){ return url; }
+  }
+
+  function render(){
+    const root = document.getElementById('categories');
+    root.innerHTML = '';
+    data.forEach(cat => {
+      const items = [...cat.items].sort((a,b) => order[a.importance] - order[b.importance]);
+      const section = document.createElement('section');
+      section.className = 'category';
+      section.dataset.category = cat.category.toLowerCase();
+
+      const head = document.createElement('div');
+      head.className = 'category-head';
+      head.innerHTML = `<h2>${cat.category}</h2><span class="count">${items.length}</span>`;
+      section.appendChild(head);
+
+      const ul = document.createElement('ul');
+      ul.className = 'links';
+
+      items.forEach(item => {
+        const li = document.createElement('li');
+        li.className = 'link-row';
+        li.dataset.importance = item.importance;
+        li.dataset.search = (item.name + ' ' + item.desc + ' ' + cat.category).toLowerCase();
+
+        li.innerHTML = `
+          <a class="row-link" href="${item.url}" target="_blank" rel="noopener noreferrer">
+            <i class="dot ${item.importance}" style="margin-top:8px"></i>
+            <span class="row-text">
+              <p class="row-name">${item.name}</p>
+              <p class="row-desc">${item.desc}</p>
+              <p class="row-host">${hostOf(item.url)}</p>
+            </span>
+          </a>`;
+        ul.appendChild(li);
+      });
+
+      section.appendChild(ul);
+      root.appendChild(section);
+    });
+  }
+
+  render();
+
+  document.getElementById('search').addEventListener('input', (e) => {
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll('li.link-row').forEach(li => {
+      li.classList.toggle('hidden', q && !li.dataset.search.includes(q));
+    });
+    document.querySelectorAll('section.category').forEach(sec => {
+      const visible = [...sec.querySelectorAll('li.link-row')].some(li => !li.classList.contains('hidden'));
+      sec.style.display = visible ? '' : 'none';
+    });
+  });
+</script>
+
+</body>
+</html>
